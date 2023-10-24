@@ -52,7 +52,7 @@ Detailed installation instructions, including any configuration steps. For examp
 
 2. install environment:
 ```bash
-   conda env create -f environment.yaml
+   conda env create -f environment.edi.yaml
 ```
 
 3. install atlite+tide:
@@ -64,10 +64,17 @@ Detailed installation instructions, including any configuration steps. For examp
 ## Instruction
 
 ### atlite
-具体功能和用法
-修改了什么
+
 ### pypsa-eur
-具体功能和用法
-修改了什么
+
+```bash
+conda activate pypsa-eur-edi
+snakemake -call solve_elec_networks --configfile path-to-configfile
+# dry run
+# snakemake -call solve_elec_networks --configfile path-to-configfile -n
+
+```
+For the configuration file in config/renewable, please run with config.renewable2019.yaml first
+
 ### snakemake
-具体功能和用法
+
