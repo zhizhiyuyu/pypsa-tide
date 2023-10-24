@@ -279,13 +279,24 @@ def shapes_to_shapes(orig, dest):
     return transfer
 
 
-def attach_load(n, regions, load, nuts3_shapes, countries, scaling=1.0):
+def attach_load(n, regions, load, nuts3_shapes, countries, scaling=1.0, Tf=None, Pf=None):
     substation_lv_i = n.buses.index[n.buses["substation_lv"]]
     regions = gpd.read_file(regions).set_index("name").reindex(substation_lv_i)
     opsd_load = pd.read_csv(load, index_col=0, parse_dates=True).filter(items=countries)
+    
+    if Tf is not None and Pf is not None:
+        # Historical totals and peaks per country
+        Th_per_country = opsd_load.sum() # Total historical energy over the year in MWh
+        Ph_per_country = opsd_load.max() # # Peak historical load in MW
+        Tf = Tf*1e3 # Total future energy over the year in MWh
+        Pf = Pf*1e3 # Peak future load in MW
+        k = 8760 
+        c1_per_country = (Tf - Pf * k) / (Th_per_country - Ph_per_country * k)
+        c2_per_country = Pf - c1_per_country * Ph_per_country
 
-    logger.info(f"Load data scaled with scalling factor {scaling}.")
-    opsd_load *= scaling
+        # Applying the linear transformation for each country
+        for country in countries:
+            opsd_load[country] = opsd_load[country] * c1_per_country[country] + c2_per_country[country]
 
     nuts3 = gpd.read_file(nuts3_shapes).set_index("index")
 
@@ -368,7 +379,7 @@ def attach_wind_and_solar(
                 continue
 
             supcar = car.split("-", 2)[0]
-            if supcar == "offwind":
+            if supcar == "offwind" or supcar == "tide":
                 underwater_fraction = ds["underwater_fraction"].to_pandas()
                 connection_cost = (
                     line_length_factor
@@ -381,7 +392,7 @@ def attach_wind_and_solar(
                     )
                 )
                 capital_cost = (
-                    costs.at["offwind", "capital_cost"]
+                    costs.at[supcar, "capital_cost"]
                     + costs.at[car + "-station", "capital_cost"]
                     + connection_cost
                 )
@@ -406,7 +417,6 @@ def attach_wind_and_solar(
                 capital_cost=capital_cost,
                 efficiency=costs.at[supcar, "efficiency"],
                 p_max_pu=ds["profile"].transpose("time", "bus").to_pandas(),
-                lifetime=costs.at[supcar, "lifetime"],
             )
 
 
@@ -831,6 +841,8 @@ if __name__ == "__main__":
         snakemake.input.nuts3_shapes,
         params.countries,
         params.scaling_factor,
+        params.get("Tf",None),
+        params.get("Pf",None),
     )
 
     update_transmission_costs(n, costs, params.length_factor)
