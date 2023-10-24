@@ -1,9 +1,5 @@
 # PyPSA-Eur + tidal range energy
 
-![Project Logo](logo.png) <!-- If applicable -->
-
-Short project description or overview.
-
 ## Table of Contents
 
 - [PyPSA-Eur + tidal range energy](#pypsa-eur--tidal-range-energy)
