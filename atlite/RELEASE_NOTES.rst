@@ -12,6 +12,30 @@ Release Notes
 .. Upcoming Release
 .. ================
 
+
+Version 0.2.12
+==============
+
+* Fix: the wind turbine power curve is checked for a missing cut-out wind speed and an option to add a
+  cut-out wind speed at the end of the power curve is introduced. From the next release v0.2.13, adding
+  a cut-out wind speed will be the default behavior (`GH #316 <https://github.com/PyPSA/atlite/pull/316>`_)
+* Compatibility with xarray >= 2023.09.: The chunked spatial dimension in `aggregate` was raising an error with the new xarray version. This is fixed now.
+* Bug fix: Some wind turbine models did not include a cut-out wind speed, potentially causing overestimated power generation in windy conditions. Cut-out wind speeds were added to the following affected wind turbine models (`GH #314 <https://github.com/PyPSA/atlite/issues/314>`_):
+    * NREL_ReferenceTurbine_2016CACost_10MW_offshore
+    * NREL_ReferenceTurbine_2016CACost_6MW_offshore
+    * NREL_ReferenceTurbine_2016CACost_8MW_offshore
+    * NREL_ReferenceTurbine_2019ORCost_12MW_offshore
+    * NREL_ReferenceTurbine_2019ORCost_15MW_offshore
+    * NREL_ReferenceTurbine_2020ATB_12MW_offshore
+    * NREL_ReferenceTurbine_2020ATB_15MW_offshore
+    * NREL_ReferenceTurbine_2020ATB_18MW_offshore
+* Fix: the wind turbine power curve is checked for a missing cut-out wind speed and an option to add a
+  cut-out wind speed at the end of the power curve is introduced. From the next release v0.2.13, adding
+  a cut-out wind speed will be the default behavior.
+* A cutout can now be loaded with setting chunks to ``auto``.
+* The Cutout class has a new function ``area`` which return a DataArray with dimensions (x,y) with the area of each grid cell.
+* The Cutout class has a new function ``layout_from_area_density`` which returns a capacity layout with the capacity per grid cell based on the area density.
+
 Version 0.2.11
 ==============
 
@@ -96,9 +120,7 @@ Version 0.2.6
 * Enabled the GitHub feature "Cite this repository" to generate a BibTeX file (Added a `CITATION.cff` file to the repository).
 
 **Bug fixes**
-* The solar position for ERA5 cutouts is now calculated for half a time step earlier (time-shift by `cutout.dt/2`) to account for the aggregated nature of
-  ERA5 variables (see https://github.com/PyPSA/atlite/issues/158). The fix is only applied to newly created cutouts. Previously created cutouts do not profit
-  from this fix and need to be recreated `cutout.prepare(overwrite=True)`.
+* The solar position for ERA5 cutouts is now calculated for half a time step earlier (time-shift by `cutout.dt/2`) to account for the aggregated nature of ERA5 variables (see https://github.com/PyPSA/atlite/issues/158). The fix is only applied to newly created cutouts. Previously created cutouts do not profit from this fix and need to be recreated `cutout.prepare(overwrite=True)`.
 * The functions `make_latitude` and `make_latitude_optimal` were not converting degrees to radian correctly. This resulted in a wrong calculation of the power output when using the orientation `latitude_optimal` or `latitude` in the `pv` conversion function. We are sorry for inconveniences.
 
 
