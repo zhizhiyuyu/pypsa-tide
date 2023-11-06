@@ -58,6 +58,7 @@ Detailed installation instructions, including any configuration steps. For examp
 ```bash
   #uptide 
   pip install uptide
+
   # the Aviso FES package
   conda install -c anaconda cmake
   pip install packaging
