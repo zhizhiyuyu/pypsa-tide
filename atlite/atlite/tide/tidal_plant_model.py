@@ -145,7 +145,7 @@ class TidalLagoonSimulation:
         ctrl["h_t"][0], ctrl["h_t"][1], ctrl["t_p"][0], ctrl["t_p"][1], ctrl["g_t"][0], ctrl["g_t"][1] = x
         cost = lagoon_operation.tidal_lagoon_0d_model(simulation_main, elevation_time_series, area_elevation_curve,
                                                       status_copy, ctrl, params, variable_tide_limits=self.variable_tide_limits)
-        retuarn -cost["E"]
+        return -cost["E"]
 
     def _optimize(self, Dt, cycles, bounds, x0, status, control, params, maxiter=50):
         control_storage = []

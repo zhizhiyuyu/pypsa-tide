@@ -1,14 +1,9 @@
-
-name: pypsa-eur-edi
+name: pypsa-eur
 channels:
 - conda-forge
 - bioconda
 dependencies:
-- python=3.10
-- cmake
-- netcdf4
-- fbriol::pyfes 
-
+- python>=3.8
 - pip
 
 - atlite>=0.2.9
@@ -28,7 +23,7 @@ dependencies:
 - numpy
 - pandas>=1.4
 - geopandas>=0.11.0
-- xarray
+- xarray<=2023.8.0
 - rioxarray
 - netcdf4
 - networkx
@@ -56,7 +51,7 @@ dependencies:
 
 
 - pip:
-  - tsam>=1.1.0
-  - pypsa>=0.25.1
-  - uptide
-  - cdsapi
+  - tsam>=2.3.1
+  - pypsa>=0.25.2
+
+

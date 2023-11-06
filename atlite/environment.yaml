@@ -38,3 +38,6 @@ dependencies:
   # For testing
 - pip
 - pytest
+
+- pip:
+  - uptide
