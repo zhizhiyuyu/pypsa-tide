@@ -15,12 +15,7 @@
 
 ## About
 
-A brief introduction to your project. Explain what it does, why it's useful, and who it's for. Mention any related projects or similar solutions.
-
-
 ### Built With
-
-List the technologies, frameworks, and tools used in your project. For example:
 
 - [uptide](https://github.com/stephankramer/uptide)
 - [atlite](https://github.com/PyPSA/atlite)
