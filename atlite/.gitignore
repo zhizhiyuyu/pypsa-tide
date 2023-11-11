@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: 2016 - 2023 The Atlite Authors
+#
+# SPDX-License-Identifier: CC0-1.0
+
+*~
+*.py[cod]
+.~*
+__pycache__
+.ipynb_checkpoints
+doc/_build/
+build/
+dist/
+.eggs
+atlite.egg-info/
+doc/.vscode/settings.json
+.vscode/settings.json
+test/*.nc
+dev-scripts/
+examples/*.nc
+examples/*.csv
+examples/*.zip
+examples/*.tif
+atlite/version.py
+paper
+.coverage*
+!.coveragerc
+
+# Ignore PyCharm / JetBrains IDE project files
+.idea/
+examples/Helsinki-Vantaa_2012.ipynb
