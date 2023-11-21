@@ -119,6 +119,7 @@ cost = atlite.tide.calculate_cost(capacity, area)
 
 ```
 ### pypsa-eur
+change the value of key ```fes_path``` to your path to store FES2014 data in configfile.
 
 ```bash
 conda activate pypsa-eur-edi
