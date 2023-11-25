@@ -68,7 +68,6 @@ Detailed installation instructions, including any configuration steps. For examp
   # solver  
   conda install -c gurobi gurobi
   conda install -c conda-forge ipopt coincbc
-  conda install glpk  
 ```
 5. download data
    
