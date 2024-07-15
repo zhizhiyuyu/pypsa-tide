@@ -292,30 +292,15 @@ if __name__ == "__main__":
     area = xr.DataArray(
         area.values.reshape(cutout.shape), [cutout.coords["y"], cutout.coords["x"]]
     )
-
-    if "pe_min" in params:
-        pe_min = params["pe_min"]
-        pe_per_sqkm = cutout.tidalrange()
-        pe_filter = (pe_per_sqkm>pe_min).astype(int).values
-        availability = availability * pe_filter  
-        available_area = availability.sum("bus")*area
-        capacity_per_sqkm = cutout.tidalrange(return_capacity=True)
-        potential = capacity_per_sqkm * available_area
-        resource['capacity'] = potential
-        resource['area'] = available_area
-
-    else:
-        potential = capacity_per_sqkm * availability.sum("bus") * area
+    
+    potential = capacity_per_sqkm * availability.sum("bus") * area
     func = getattr(cutout, resource.pop("method"))
     if client is not None:
         resource["dask_kwargs"] = {"scheduler": client}
     capacity_factor = correction_factor * func(capacity_factor=True, **resource)
 
-    #layout = scaling_factor * capacity_factor * area * capacity_per_sqkm
-    if "pe_min" in params:
-        layout = area * capacity_per_sqkm
-    else:
-        layout = capacity_factor * area * capacity_per_sqkm
+    
+    layout = capacity_factor * area * capacity_per_sqkm
     profile, capacities = func(
         matrix=availability.stack(spatial=["y", "x"]),
         layout=layout,
@@ -338,8 +323,6 @@ if __name__ == "__main__":
         )
 
     logger.info("Calculate average distances.")
-    if "pe_min" in params:
-        layout = scaling_factor * capacity_factor * (area * capacity_per_sqkm.values)
     layoutmatrix = (layout * availability).stack(spatial=["y", "x"])
     
     coords = cutout.grid[['x', 'y']]
@@ -369,8 +352,7 @@ if __name__ == "__main__":
 
 
     if (snakemake.wildcards.technology.startswith("offwind") or 
-    snakemake.wildcards.technology.startswith("wave") or 
-    snakemake.wildcards.technology.startswith("tide")):
+    snakemake.wildcards.technology.startswith("wave")):
         logger.info("Calculate underwater fraction of connections.")
         offshore_shape = gpd.read_file(snakemake.input["offshore_shapes"]).unary_union
         underwater_fraction = []
@@ -382,13 +364,6 @@ if __name__ == "__main__":
 
         ds["underwater_fraction"] = xr.DataArray(underwater_fraction, [buses])
 
-    if snakemake.wildcards.technology.startswith("tide"):
-        ds['capacity'] =  layout * availability.sum("bus")
-        ds['available_area'] = available_area
-        ds['area'] = area
-        ds['availablity'] = availability.sum("bus")
-        ds['pe_per_sqkm'] = pe_per_sqkm.sum().values
-        ds['ca_per_sqkm']=capacity_per_sqkm
     # select only buses with some capacity and minimal capacity factor
     ds = ds.sel(
         bus=(
@@ -396,7 +371,6 @@ if __name__ == "__main__":
             & (ds["p_nom_max"] > params.get("min_p_nom_max", 0.0))
         )
     )
-
     if "clip_p_max_pu" in params:
         min_p_max_pu = params["clip_p_max_pu"]
         ds["profile"] = ds["profile"].where(ds["profile"] >= min_p_max_pu, 0)
