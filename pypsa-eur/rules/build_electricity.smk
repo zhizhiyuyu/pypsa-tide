@@ -250,7 +250,7 @@ rule build_renewable_profiles:
     resources:
         mem_mb=ATLITE_NPROCESSES * 5000,
     wildcard_constraints:
-        technology="(?!hydro).*",  # Any technology other than hydro
+        technology="(?!hydro|tidal).*",  # Any technology other than hydro/tidal
     conda:
         "../envs/environment.yaml"
     script:
@@ -274,6 +274,31 @@ rule build_monthly_prices:
     script:
         "../scripts/build_monthly_prices.py"
 
+rule build_tidal_profile:
+    params:
+        tidal=config["renewable"]["tidal"],
+
+    input:
+        base_network=RESOURCES + "networks/base.nc",
+        offshore_shapes=RESOURCES + "offshore_shapes.geojson",
+        regions= RESOURCES + "regions_offshore.geojson",
+        cutout=lambda w: "cutouts/"
+        + CDIR
+        + config["renewable"]["tidal"]["cutout"]
+        + ".nc",
+    output:
+        profile=RESOURCES + "profile_tidal.nc",
+    log:
+        LOGS + "build_renewable_profile_tidal.log",
+    benchmark:
+        BENCHMARKS + "build_renewable_profiles_tidal"
+    threads: ATLITE_NPROCESSES
+    resources:
+        mem_mb=ATLITE_NPROCESSES * 5000,
+    conda:
+        "../envs/environment.yaml"
+    script:
+        "../scripts/build_tidal_profile.py"
 
 rule build_hydro_profile:
     params:
@@ -323,11 +348,15 @@ rule add_electricity:
     params:
         length_factor=config["lines"]["length_factor"],
         scaling_factor=config["load"]["scaling_factor"],
+        Tf = config["load"].get("Tf",None),
+        Pf = config["load"].get("Pf",None),
         countries=config["countries"],
         renewable=config["renewable"],
         electricity=config["electricity"],
         conventional=config["conventional"],
         costs=config["costs"],
+
+        
     input:
         **{
             f"profile_{tech}": RESOURCES + f"profile_{tech}.nc"
@@ -477,10 +506,13 @@ rule prepare_network:
         gaslimit=config["electricity"].get("gaslimit"),
         max_hours=config["electricity"]["max_hours"],
         costs=config["costs"],
+        co2_budget=config.get("co2_budget", None)
     input:
         RESOURCES + "networks/elec_s{simpl}_{clusters}_ec.nc",
         tech_costs=COSTS,
         co2_price=lambda w: RESOURCES + "co2_price.csv" if "Ept" in w.opts else [],
+        co2_totals_name=RESOURCES + "co2_totals.csv",
+        co2="data/bundle-sector/eea/UNFCCC_v23.csv",
     output:
         RESOURCES + "networks/elec_s{simpl}_{clusters}_ec_l{ll}_{opts}.nc",
     log:
@@ -494,3 +526,5 @@ rule prepare_network:
         "../envs/environment.yaml"
     script:
         "../scripts/prepare_network.py"
+
+
