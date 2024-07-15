@@ -1,0 +1,32 @@
+Lagoon: 
+# swansea
+  turbine_no: 16
+  sluice_no: 8
+  sluice_area: 100 # (m2)
+  COED: 1.0 # Discharge Coefficient
+  generation_time: # (h) generation time before sluicing
+    ebb: 3.0
+    flood: 3.0
+  min_head: 1.0 # (m) minimun head for turbine operation
+  holdtime: # (h) holding mode duration
+    ebb: 1.79
+    flood: 1.76
+  pumping_head: 2.5  # (m)
+  pumping_duration:  # (h)
+    ebb: 0
+    flood: 0
+  tidal_range_limits: # (m)
+    min: 7.0
+    max: -6.0
+
+turbine:
+  diameter: 7.35
+  capacity: 20 # (MW)
+  grid_frequency: 50 # (Hz)
+  generation_poles: 95 
+  fluid_density: 1025 # (kg/m3)
+  efficiency: 
+    ebb: 0.93
+    flood: 0.83
+  hill_chart: 0 
+  # 0: hill_chart_head, 1:hill_chart_power

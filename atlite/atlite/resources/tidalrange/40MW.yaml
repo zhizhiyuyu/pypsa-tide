@@ -1,0 +1,33 @@
+Lagoon:
+# severn barrage (HRC) 
+  turbine_no: 216
+  sluice_no: 100
+  sluice_area: 324 # (m2)
+  COED: 1.0 # Discharge Coefficient
+  generation_time: # (h) generation time before sluicing
+    ebb: 3.0
+    flood: 3.0
+  min_head: 1.0 # (m) minimun head for turbine operation
+  holdtime: # (h) holding mode duration
+    ebb: 1.75
+    flood: 1.67
+  pumping_head: 2.5  # (m)
+  pumping_duration:  # (h)
+    ebb: 0.0
+    flood: 0.0
+  tidal_range_limits: # (m)
+    min: 7.0
+    max: -6.0
+
+# need to confirm gf and gp
+turbine:
+  diameter: 9.0
+  capacity: 40 # (MW)
+  grid_frequency: 50 # (Hz)
+  generation_poles: 142
+  fluid_density: 1025 # (kg/m3)
+  efficiency: 
+    ebb: 0.93
+    flood: 0.83
+  hill_chart: 0 
+  # 0: hill_chart_head, 1:hill_chart_power
