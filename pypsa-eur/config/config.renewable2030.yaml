@@ -105,23 +105,13 @@ atlite:
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#renewable
 renewable:
-  tide:
+  tidal:
     cutout: gb-2019-all
     resource:
       method: tidalplant
-      lagoon: '20MW'
-      operation: 'two-way'
-    capacity_per_sqkm: None
-    correction_factor: 1
-    corine: [44, 255]
-    natura: true
-    ship_threshold: 400
-    max_depth: 30
-    potential: simple # or conservative
+      path: "/Users/zhiyu/Desktop/paper/tidalRange.xlsx"
+      sheet_name: "Hendry"
     clip_p_max_pu: 1.e-2
-    pe_min: 50
-    scaling_factor: 6.4
-
   onwind:
     cutout: gb-2019-all
     resource:
@@ -382,7 +372,7 @@ plotting:
 
   tech_colors:
     # tide
-    "tide" : "#d35050"
+    "tidal" : "#d35050"
     # wind
     onwind: "#235ebc"
     onshore wind: "#235ebc"

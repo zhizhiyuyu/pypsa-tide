@@ -22,7 +22,7 @@ remote:
 run:
   name: "2019"
   disable_progressbar: true
-  shared_resources: true
+  shared_resources: false
   shared_cutouts: true
 scenario:
   clusters:
@@ -43,11 +43,11 @@ enable:
   prepare_links_p_nom: false
   retrieve_databundle: false
   retrieve_sector_databundle: false
-  retrieve_cost_data: true
+  retrieve_cost_data: false
   build_cutout: false
   retrieve_cutout: false
   build_natura_raster: false
-  retrieve_natura_raster: true
+  retrieve_natura_raster: false
   custom_busmap: false
 
 
@@ -70,14 +70,14 @@ electricity:
     H2: 168
 
   extendable_carriers:
-    Generator: [solar, onwind, offwind-ac, offwind-dc]
+    Generator: [solar, onwind, offwind-ac, offwind-dc, tidal]
     StorageUnit: [] # battery, H2
     Store: [battery, H2]
     Link: [] # H2 pipeline
   powerplants_filter:  DateOut >= 2020 or DateOut != DateOut
   custom_powerplants: false
   conventional_carriers: [nuclear, oil, OCGT, CCGT, coal, lignite, geothermal, biomass]
-  renewable_carriers: [solar, onwind, offwind-ac, offwind-dc, hydro]
+  renewable_carriers: [solar, onwind, offwind-ac, offwind-dc, hydro, tidal]
   estimate_renewable_capacities:
     enable: true
     from_opsd: true
@@ -102,27 +102,18 @@ atlite:
     gb-2019-all:
       module: [era5, tide]
       time: ["2019", "2019"]
-      fes_path: "/Users/zz5322/Desktop/uptide/ocean_tide_extrapolated"
+      fes_path: "/Users/zhiyu/Desktop/allpypsa/ocean_tide_extrapolated"
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#renewable
 renewable:
-  tide:
+  tidal:
     cutout: gb-2019-all
     resource:
       method: tidalplant
-      lagoon: '20MW'
-      operation: 'two-way'
-    capacity_per_sqkm: None
-    correction_factor: 1
-    corine: [44, 255]
-    natura: true
-    ship_threshold: 400
-    max_depth: 30
-    potential: simple # or conservative
+      path: "data/tidalRange.xlsx" # change the path 
+      sheet_name: "Hendry" # select a sheet
     clip_p_max_pu: 1.e-2
-    pe_min: 50
-    scaling_factor: 6.4
-
+    
   onwind:
     cutout: gb-2019-all
     resource:
@@ -238,6 +229,9 @@ load:
   time_shift_for_large_gaps: 1w
   manual_adjustments: true # false
   scaling_factor: 1.0
+  #Tf: 368814 # GWh
+  #Pf: 62.8 # GW 
+
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#costs
 costs:
