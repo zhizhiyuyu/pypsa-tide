@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: atlite
-Version: 0.1.dev29+g6bea43c.d20240715
+Version: 0.1.dev36+g8c22d9c.d20240716
 Summary: Library for fetching and converting weather data to power systems data
 Home-page: https://github.com/PyPSA/atlite
 Author: The Atlite Authors

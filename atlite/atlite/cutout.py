@@ -46,7 +46,7 @@ from atlite.convert import (
     temperature,
     wind,
     tidalplant,
-    #tidalrange,
+    tidalrange,
     wave,
 )
 from atlite.data import available_features, cutout_prepare
@@ -671,6 +671,6 @@ class Cutout:
 
     tidalplant = tidalplant
 
-    #tidalrange = tidalrange
+    tidalrange = tidalrange
 
     wave = wave

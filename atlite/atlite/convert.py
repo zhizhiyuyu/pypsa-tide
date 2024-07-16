@@ -31,8 +31,7 @@ from atlite.pv.irradiation import TiltedIrradiation
 from atlite.pv.orientation import SurfaceOrientation, get_orientation
 from atlite.pv.solar_panel_model import SolarPanelModel
 from atlite.pv.solar_position import SolarPosition
-from atlite.tide import input_0D, wrapper_run_simulation
-#, calculate_potential_energy, calculate_capacity
+from atlite.tide import input_0D, wrapper_run_simulation, calculate_potential_energy, calculate_capacity
 from atlite.resource import (
     get_cspinstallationconfig,
     get_solarpanelconfig,
@@ -1132,7 +1131,6 @@ def tidalplant(cutout,path, sheet_name, **params):
     total_capacity = total_capacity,
     **params,
     )
-"""
 
 def tidalrange(cutout, return_capacity=False):
     eta_data = cutout.data['tide_elevation'].chunk({'time': -1})
@@ -1160,7 +1158,7 @@ def tidalrange(cutout, return_capacity=False):
         da.attrs["units"] = "KWh/m^2"
         da = da.rename("potential energy per square meter") 
     return da
-"""
+
 #wave
 def convert_wave(ds, generator):
     #Get power matrix
