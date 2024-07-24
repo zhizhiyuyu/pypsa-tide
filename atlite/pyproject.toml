@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: 2020 - 2023 The Atlite Authors
+#
+# SPDX-License-Identifier: MIT
+
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm>=6.2"]
+
+[tool.setuptools_scm]
+write_to = "atlite/version.py"
